@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeNavigator from "./Home";
+import CustomDrawer from "./CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 
@@ -10,7 +11,19 @@ const Drawer = createDrawerNavigator();
 const RootNavigator = (props) => {
   return (
     <NavigationContainer>
-      <HomeNavigator />
+      <Drawer.Navigator
+        screenOptions={{
+          headerShown: false,
+          drawerStyle: {
+            backgroundColor: "#ccc",
+            width: 300,
+          },
+          overlayColor: "transparent",
+        }}
+        drawerContent={(props) => <CustomDrawer {...props} />}
+      >
+        <Drawer.Screen name="Home" component={HomeNavigator} />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };
