@@ -107,6 +107,7 @@ const HomeScreen = ({ navigation }) => {
                 alignItems: "center",
                 top: 160,
               }}
+              onPress={() => navigation.navigate("RoomRegistration")}
             >
               <Text
                 style={{ fontSize: 25, fontWeight: "bold", color: "white" }}

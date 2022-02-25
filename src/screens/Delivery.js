@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { ImageBackground, View, Text, TouchableOpacity } from "react-native";
+import {
+  ImageBackground,
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Animatable from "react-native-animatable";
@@ -10,7 +16,7 @@ import Phone from "react-native-vector-icons/AntDesign";
 import Chat from "react-native-vector-icons/AntDesign";
 import AntDesi from "react-native-vector-icons/AntDesign";
 
-export default function Delivery() {
+export default function Delivery({ navigation }) {
   const [openMonth, setOpenMonth] = useState(false);
   const [monthValue, setMonthValue] = useState(null);
   const [months, setMonths] = useState([
@@ -91,7 +97,7 @@ export default function Delivery() {
           <View style={{ paddingTop: 15 }}>
             <Text style={{ fontSize: 24 }}>Upcoming Deliveries</Text>
             <View>
-              <View
+              <TouchableOpacity
                 style={{
                   backgroundColor: "#fff",
                   width: 300,
@@ -101,11 +107,14 @@ export default function Delivery() {
                   height: 70,
                   padding: 7,
                 }}
+                onPress={() => {
+                  navigation.navigate("DeliveryInfo");
+                }}
               >
                 <Text>14/02/2022</Text>
                 <Text>From Pretoria To Newcastle</Text>
                 <Text>Booked By Sifiso</Text>
-              </View>
+              </TouchableOpacity>
               <View style={{ flexDirection: "row", paddingTop: 5 }}>
                 <View
                   style={{
