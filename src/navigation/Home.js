@@ -12,6 +12,7 @@ import MyRooms from "../screens/MyRooms";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Login";
 import DeliveryInformation from "../screens/DeliveryInformation";
+import Chats from "../screens/Chats";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const HomeNavigator = (props) => {
       <Stack.Screen name="RoomsInformation" component={RoomInformation} />
       <Stack.Screen name="Rooms" component={MyRooms} />
       <Stack.Screen name="DeliveryInfo" component={DeliveryInformation} />
+      <Stack.Screen name="Chats" component={Chats} />
     </Stack.Navigator>
   );
 };

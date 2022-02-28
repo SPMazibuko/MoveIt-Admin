@@ -81,17 +81,13 @@ const CustomDrawer = (props) => {
 
       <DrawerItemList {...props} />
 
-      {/* Make money */}
       <TouchableOpacity onPress={() => navigation.navigate("Rooms")}>
         <Text style={{ padding: 5, paddingLeft: 20 }}>My Rooms</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Delivery")}>
         <Text style={{ padding: 5, paddingLeft: 20 }}>My Deliveries</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={{ padding: 5, paddingLeft: 20 }}>Logout</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=> navigation.navigate('Login')}>
         <Text style={{ padding: 5, paddingLeft: 20 }}>Logout</Text>
       </TouchableOpacity>
     </DrawerContentScrollView>

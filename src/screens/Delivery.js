@@ -139,6 +139,7 @@ export default function Delivery({ navigation }) {
                     alignItems: "center",
                     marginLeft: 190,
                   }}
+                  onPress={() => navigation.navigate("Chats")}
                 >
                   <Chat name="message1" size={30} color="black" />
                 </TouchableOpacity>
