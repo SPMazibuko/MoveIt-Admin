@@ -158,4 +158,10 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
+  deliveryText: {
+    fontSize: 16,
+    fontFamily: "normal",
+    fontWeight: "400",
+    color: "rgba(255, 255, 255, 1)",
+  },
 });
