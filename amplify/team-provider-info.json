@@ -1,0 +1,27 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-moveitapp-staging-112129-authRole",
+      "UnauthRoleArn": "arn:aws:iam::635286580247:role/amplify-moveitapp-staging-112129-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::635286580247:role/amplify-moveitapp-staging-112129-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-moveitapp-staging-112129-deployment",
+      "UnauthRoleName": "amplify-moveitapp-staging-112129-unauthRole",
+      "StackName": "amplify-moveitapp-staging-112129",
+      "StackId": "arn:aws:cloudformation:us-east-2:635286580247:stack/amplify-moveitapp-staging-112129/12a2e890-9ae4-11ec-843d-06bec56a9e74",
+      "AmplifyAppId": "dhaaihvnzrpkn"
+    },
+    "categories": {
+      "auth": {
+        "moveitappf4924080": {},
+        "true": {}
+      },
+      "function": {
+        "S3Trigger2026952f": {
+          "deploymentBucketName": "amplify-moveitapp-staging-112129-deployment",
+          "s3Key": "amplify-builds/S3Trigger2026952f-307543506f4d5646566f-build.zip"
+        }
+      }
+    }
+  }
+}

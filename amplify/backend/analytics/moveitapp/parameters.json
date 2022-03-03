@@ -1,0 +1,21 @@
+{
+    "appName": "moveitapp",
+    "roleName": "pinpointLambdaRole9c3e6036",
+    "cloudformationPolicyName": "cloudformationPolicy9c3e6036",
+    "cloudWatchPolicyName": "cloudWatchPolicy9c3e6036",
+    "pinpointPolicyName": "pinpointPolicy9c3e6036",
+    "authPolicyName": "pinpoint_amplify_9c3e6036",
+    "unauthPolicyName": "pinpoint_amplify_9c3e6036",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

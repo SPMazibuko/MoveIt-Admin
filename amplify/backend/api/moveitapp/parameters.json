@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "moveitapp",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authmoveitappf4924080",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
