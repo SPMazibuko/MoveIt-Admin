@@ -1,6 +1,10 @@
 export type AmplifyDependentResourcesAttributes = {
     "auth": {
+<<<<<<< HEAD
         "moveitappf4924080": {
+=======
+        "moveitapp4cea0d19": {
+>>>>>>> baaadcee082be0104b10924c17d8573b9bd8b174
             "IdentityPoolId": "string",
             "IdentityPoolName": "string",
             "UserPoolId": "string",
@@ -9,6 +13,7 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientIDWeb": "string",
             "AppClientID": "string"
         }
+<<<<<<< HEAD
     },
     "api": {
         "moveitapp": {
@@ -37,5 +42,7 @@ export type AmplifyDependentResourcesAttributes = {
             "Id": "string",
             "appName": "string"
         }
+=======
+>>>>>>> baaadcee082be0104b10924c17d8573b9bd8b174
     }
 }

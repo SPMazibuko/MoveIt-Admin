@@ -1,6 +1,10 @@
 {
   "auth": {
+<<<<<<< HEAD
     "moveitappf4924080": {
+=======
+    "moveitapp4cea0d19": {
+>>>>>>> baaadcee082be0104b10924c17d8573b9bd8b174
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,8 +12,12 @@
       "frontendAuthConfig": {
         "socialProviders": [],
         "usernameAttributes": [
+<<<<<<< HEAD
           "EMAIL",
           "PHONE_NUMBER"
+=======
+          "EMAIL"
+>>>>>>> baaadcee082be0104b10924c17d8573b9bd8b174
         ],
         "signupAttributes": [
           "EMAIL"
@@ -27,6 +35,7 @@
         ]
       }
     }
+<<<<<<< HEAD
   },
   "api": {
     "moveitapp": {
@@ -83,5 +92,7 @@
       "service": "Pinpoint",
       "providerPlugin": "awscloudformation"
     }
+=======
+>>>>>>> baaadcee082be0104b10924c17d8573b9bd8b174
   }
 }

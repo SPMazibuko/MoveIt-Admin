@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-moveitapp-staging-112129-authRole",
@@ -21,6 +22,7 @@
           "deploymentBucketName": "amplify-moveitapp-staging-112129-deployment",
           "s3Key": "amplify-builds/S3Trigger2026952f-307543506f4d5646566f-build.zip"
         }
+
       }
     }
   }
