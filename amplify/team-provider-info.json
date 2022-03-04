@@ -10,6 +10,11 @@
       "StackName": "amplify-moveitapp-dev-161311",
       "StackId": "arn:aws:cloudformation:us-east-2:635286580247:stack/amplify-moveitapp-dev-161311/d29c8a70-9b0c-11ec-98dd-06bdc6d20dc6",
       "AmplifyAppId": "dhaaihvnzrpkn"
+    },
+    "categories": {
+      "auth": {
+        "moveitappd9e83ed5": {}
+      }
     }
   }
 }
