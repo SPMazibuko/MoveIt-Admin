@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "moveitapp",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\spmaz\\Desktop\\React-Native\\MoveIT-App\\amplify\\backend\\api\\moveitapp\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}

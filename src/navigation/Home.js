@@ -13,6 +13,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../screens/Login";
 import DeliveryInformation from "../screens/DeliveryInformation";
 import Chats from "../screens/Chats";
+import ConfirmSignUp from "../screens/ConfirmSignUp";
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ const HomeNavigator = (props) => {
       <Stack.Screen name="Rooms" component={MyRooms} />
       <Stack.Screen name="DeliveryInfo" component={DeliveryInformation} />
       <Stack.Screen name="Chats" component={Chats} />
+      <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} />
     </Stack.Navigator>
   );
 };

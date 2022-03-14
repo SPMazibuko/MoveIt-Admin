@@ -12,7 +12,7 @@ import {
 import FormHeader from "../components/FormHeader";
 import FormSelectBtn from "../components/FormSelectBtn";
 import LoginForm from "../components/LoginForm";
-import SignUpForm from "../components/SigngUpForm";
+import SignUpForm from "../components/SignUpForm";
 
 const { width } = Dimensions.get("window");
 

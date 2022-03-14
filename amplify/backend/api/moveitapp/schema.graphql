@@ -1,0 +1,60 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+type User @model {
+  id: ID!
+  userName: String!
+  email: String!
+  vehiclebooking: [VehicleBooking]
+  roombooking: [RoomBooking]
+}
+
+# delivery schemas
+type Vehicle @model {
+  id: ID!
+  RegistrationNumber: String!
+  VINNumber: String!
+  Manufacture: String!
+  Model: String!
+  Year: String!
+  type: String!
+  vehiclebooking: [VehicleBooking]
+}
+
+type VehicleBooking @model {
+  id: ID!
+  user: User!
+  vehicle: Vehicle!
+  createdAt: AWSDateTime!
+
+  originLatitude: Float!
+  originLongitude: Float!
+
+  destLatitude: Float!
+  destLongitude: Float!
+}
+
+# Rent schemas
+type Room @model {
+  id: ID!
+  province: String!
+  town: String!
+  houseNumber: String!
+  streetNumber: String!
+  suburb: String!
+  zipCode: Int!
+  price: Float!
+  type: String!
+  description: String!
+  roombooking: [RoomBooking]
+}
+
+type RoomBooking @model {
+  id: ID!
+  user: User!
+  room: Room!
+  createdAt: AWSDateTime!
+}

@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import React from "react";
 
-export default function FormInput({ placeholder, title }) {
+export default function FormInput({ ...otherProps }) {
   return (
-    <>
-      <Text style={styles.title}>{title}</Text>
+    <View style={styles.container}>
       <TextInput
-        placeholder={placeholder}
-        placeholderTextColor="rgba(232, 232, 232, 0.61)"
         style={styles.input}
+        placeholderTextColor="#6e6869"
+        {...otherProps}
       />
-    </>
+    </View>
   );
 }
 

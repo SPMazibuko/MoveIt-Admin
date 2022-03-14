@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -6,9 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 const myIcon = <Icon name="dot-circle-o" size={30} color="black" />;
 

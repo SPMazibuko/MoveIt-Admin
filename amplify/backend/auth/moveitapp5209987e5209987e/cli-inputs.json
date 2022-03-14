@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "moveitappd9e83ed5_identitypool_d9e83ed5",
+    "identityPoolName": "moveitapp5209987e_identitypool_5209987e",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "moveitd9e83ed5",
-    "userPoolName": "moveitappd9e83ed5_userpool_d9e83ed5",
+    "resourceNameTruncated": "moveit5209987e",
+    "userPoolName": "moveitapp5209987e_userpool_5209987e",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,15 +31,21 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "moveitd9e83ed5_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "moveit5209987e_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "d9e83ed5",
-    "resourceName": "moveitappd9e83ed5",
+    "sharedId": "5209987e",
+    "resourceName": "moveitapp5209987e5209987e",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "default",
-    "usernameAttributes": [
-      "email, phone_number"
-    ],
+    "useDefault": "manual",
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": {
+      "PostConfirmation": [
+        "custom"
+      ]
+    },
+    "hostedUI": false,
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
