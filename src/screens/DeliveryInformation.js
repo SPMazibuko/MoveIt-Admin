@@ -14,7 +14,7 @@ import styles from "../styles";
 // create a component
 const DeliveryInformation = () => {
   return (
-    <View style={{ height: "100%" }}>
+    <View>
       <ImageBackground
         source={require("../../assets/Images/background/background.jpeg")}
         resizeMode="cover"
