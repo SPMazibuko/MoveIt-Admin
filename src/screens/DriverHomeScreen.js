@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Dimensions,
+  Image,
+} from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Mapview, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
@@ -12,9 +19,64 @@ const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 const DriverHomeScreen = () => {
   const [isOnLine, setIsOnLine] = useState(false);
+  const [myPosition, setMyPosition] = useState(null);
+  const [booking, setBooking] = useState(null);
+  const [newBooking, setNewBooking] = useState({
+    id: "1",
+    type: "Truck",
+    originLatitude: 37.3318056,
+    originLongitude: -122.0296002,
 
+    destLatitude: 37.770707,
+    destLongitude: -122.4003769,
+
+    user: {
+      rating: 4.5,
+      name: "John",
+    },
+  });
+  {
+    /*Define onDecline function*/
+  }
+  const onDecline = () => {
+    setNewBooking(null);
+  };
+  {
+    /*Define onAccept function*/
+  }
+  const onAccept = (newBooking) => {
+    setBooking(newBooking);
+    setNewBooking(null);
+  };
+  {
+    /*Go button pressed */
+  }
   const onGoPress = () => {
     setIsOnLine(!isOnLine);
+  };
+
+  const renderBottomTittle = () => {
+    if (isOnLine) {
+      return <Text style={styles.bottomText}>You are online</Text>;
+    } else {
+      return <Text style={styles.bottomText}>You are offline</Text>;
+    }
+  };
+
+  const onUserLocationChange = (event) => {
+    console.log(event);
+    setMyPosition(event.nativeEvent.coordinate);
+  };
+
+  const onDirectionFound = (event) => {
+    console.log(event);
+    if (booking) {
+      setBooking({
+        ...booking,
+        distance: event.distance,
+        duration: event.duration,
+      });
+    }
   };
   return (
     <View>
@@ -27,18 +89,27 @@ const DriverHomeScreen = () => {
         loadingEnabled={true}
         provider={PROVIDER_GOOGLE}
         showUserLocation={true}
-        region={{
+        onUserLocationChange={onUserLocationChange}
+        initialRegion={{
           latitude: 37.78825,
           longitude: -122.4324,
           latitudeDelta: 0.2001,
           longitudeDelta: 0.2001,
         }}
       >
-        <MapViewDirections
-          origin={origin}
-          destination={destination}
-          apikey={GOOGLE_MAPS_APIKEY}
-        />
+        {booking && (
+          <MapViewDirections
+            origin={myPosition}
+            onReady={onDirectionFound}
+            destination={{
+              latitude: booking.originLatitude,
+              longitude: booking.originLongitude,
+            }}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={5}
+            strokeColor="black"
+          />
+        )}
       </Mapview>
       {/*Amount on Top*/}
       <Pressable
@@ -85,16 +156,46 @@ const DriverHomeScreen = () => {
       {/*Bottom container*/}
       <View style={styles.bottomContainer}>
         <Ionicons name={"options"} size={30} color="#4a4a4a" />
-        {isOnLine ? (
+        {booking ? (
+          <View style={{ alignItems: "center" }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text>
+                {booking.duration ? booking.duration.toFixed(2) : "?"} min
+              </Text>
+              <View style={{ borderRadius: 100 }}>
+                <Image
+                  source={require("../../assets/Images/profile.png")}
+                  resizeMode="contain"
+                  style={{ width: 30, height: 30, borderRadius: 100 }}
+                />
+              </View>
+              <Text>
+                {booking.distance ? booking.distance.toFixed(2) : "?"} km
+              </Text>
+            </View>
+            <Text style={styles.bottomText}>
+              Picking up {booking.user.name}
+            </Text>
+          </View>
+        ) : isOnLine ? (
           <Text style={styles.bottomText}>You are online</Text>
         ) : (
           <Text style={styles.bottomText}>You are offline</Text>
         )}
+        {}
         <Entypo name={"menu"} size={24} color="#4a4a4a" />
       </View>
-      {/* New Vehicle booking popup */}
 
-      <NewVehicleBookingPopUp />
+      {/* New Vehicle booking popup */}
+      {newBooking && (
+        <NewVehicleBookingPopUp
+          newBooking={newBooking}
+          duration={2}
+          distance={0.5}
+          onDecline={onDecline}
+          onAccept={() => onAccept(newBooking)}
+        />
+      )}
     </View>
   );
 };

@@ -3,20 +3,13 @@ import React from "react";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 
-const NewVehicleBookingPopUp = () => {
-  {
-    /*Decline booking function*/
-  }
-  const onDecline = () => {
-    console.warn("on decline booking");
-  };
-
-  {
-    /*Accept Booking function*/
-  }
-  const onAccept = () => {
-    console.warn("on accept booking");
-  };
+const NewVehicleBookingPopUp = ({
+  newBooking,
+  onAccept,
+  onDecline,
+  duration,
+  distance,
+}) => {
   return (
     <View style={styles.root}>
       <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
@@ -30,7 +23,7 @@ const NewVehicleBookingPopUp = () => {
       </View>
       <View style={styles.popupContainer}>
         <View style={styles.row}>
-          <Text style={styles.vehicleType}>Trailer</Text>
+          <Text style={styles.vehicleType}>{newBooking.type}</Text>
           <View style={{ borderRadius: 100 }}>
             <Image
               source={require("../../assets/Images/profile.png")}
@@ -39,12 +32,13 @@ const NewVehicleBookingPopUp = () => {
             />
           </View>
           <Text style={styles.vehicleType}>
-            <AntDesign name={"star"} size={22} />5
+            <AntDesign name={"star"} size={22} />
+            {newBooking.user.rating}
           </Text>
         </View>
 
-        <Text style={styles.minutes}> 2 min</Text>
-        <Text style={styles.distance}> 0.2 mi</Text>
+        <Text style={styles.minutes}> {duration} Min</Text>
+        <Text style={styles.distance}> {distance} km</Text>
       </View>
     </View>
   );
@@ -66,6 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     borderRadius: 10,
     alignItems: "center",
+    height: 240,
     justifyContent: "space-around",
   },
   minutes: {
