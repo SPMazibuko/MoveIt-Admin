@@ -17,3 +17,23 @@ export const createVehicle = /* GraphQL */ `
     }
   }
 `;
+
+export const updateVehicle = /* GraphQL */ `
+  mutation UpdateVehicle(
+    $input: UpdateVehicleInput!
+    $condition: ModelVehicleConditionInput
+  ) {
+    updateVehicle(input: $input, condition: $condition) {
+      id
+      RegistrationNumber
+      VINNumber
+      Manufacture
+      Model
+      Year
+      type
+      createdAt
+      isActive
+      userId
+    }
+  }
+`;

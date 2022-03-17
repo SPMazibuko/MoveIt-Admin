@@ -13,12 +13,16 @@ import Mapview, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import NewVehicleBookingPopUp from "./NewVehicleBookingPopUp";
 
+import { Auth, API, graphqlOperation } from "aws-amplify";
+import { getVehicle } from "../grapql/queries";
+import { updateVehicle } from "../grapql/mutations";
+
 const GOOGLE_MAPS_APIKEY = "AIzaSyAGXSUtb0RGrt4V55SXW5ZV9n5Z4xuVd7w";
 const origin = { latitude: 37.3318456, longitude: -122.0296002 };
 const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 const DriverHomeScreen = () => {
-  const [isOnLine, setIsOnLine] = useState(false);
+  const [vehicle, setVehicle] = useState(null);
   const [myPosition, setMyPosition] = useState(null);
   const [booking, setBooking] = useState(null);
   const [newBooking, setNewBooking] = useState({
@@ -36,6 +40,20 @@ const DriverHomeScreen = () => {
     },
   });
 
+  const fetchVehicle = async () => {
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+      const vehicleData = await API.graphql(
+        graphqlOperation(getVehicle, { id: userData.attributes.sub })
+      );
+      setVehicle(vehicleData.data.getVehicle);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    fetchVehicle();
+  }, []);
   {
     /*Define onDecline function*/
   }
@@ -52,18 +70,23 @@ const DriverHomeScreen = () => {
   {
     /*Go button pressed */
   }
-  const onGoPress = () => {
-    setIsOnLine(!isOnLine);
-  };
-
-  /*  const renderBottomTittle = () => {
-    if (isOnLine) {
-      return <Text style={styles.bottomText}>You are online</Text>;
-    } else {
-      return <Text style={styles.bottomText}>You are offline</Text>;
+  const onGoPress = async () => {
+    //update vehicle and set it to active
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+      const input = {
+        id: userData.attributes.sub,
+        isActive: !vehicle.isActive,
+      };
+      const updatedVehicle = await API.graphql(
+        graphqlOperation(updateVehicle, { input })
+      );
+      setVehicle(updatedVehicle.data.updateVehicle);
+    } catch (error) {
+      console.log(error);
     }
   };
-*/
+
   const onUserLocationChange = (event) => {
     console.log(event);
     setMyPosition(event.nativeEvent.coordinate);
@@ -151,12 +174,14 @@ const DriverHomeScreen = () => {
       </Pressable>
       {/*Go Button */}
       <Pressable onPress={onGoPress} style={styles.goButton}>
-        <Text style={styles.goText}>{isOnLine ? "END" : "GO"}</Text>
+        <Text style={styles.goText}>{vehicle?.isActive ? "END" : "GO"}</Text>
       </Pressable>
 
       {/*Bottom container*/}
       <View style={styles.bottomContainer}>
         <Ionicons name={"options"} size={30} color="#4a4a4a" />
+
+        {/*Check if booking is available calculate the distance to the user*/}
         {booking ? (
           <View style={{ alignItems: "center" }}>
             <View style={{ flexDirection: "row" }}>
@@ -178,12 +203,11 @@ const DriverHomeScreen = () => {
               Picking up {booking.user.name}
             </Text>
           </View>
-        ) : isOnLine ? (
+        ) : vehicle?.isActive ? (
           <Text style={styles.bottomText}>You are online</Text>
         ) : (
           <Text style={styles.bottomText}>You are offline</Text>
         )}
-        {}
         <Entypo name={"menu"} size={24} color="#4a4a4a" />
       </View>
 
