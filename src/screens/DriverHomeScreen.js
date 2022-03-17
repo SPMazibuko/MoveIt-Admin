@@ -14,7 +14,7 @@ import MapViewDirections from "react-native-maps-directions";
 import NewVehicleBookingPopUp from "./NewVehicleBookingPopUp";
 
 import { Auth, API, graphqlOperation } from "aws-amplify";
-import { getVehicle } from "../grapql/queries";
+import { getVehicle, listVehicleBookings } from "../grapql/queries";
 import { updateVehicle } from "../grapql/mutations";
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAGXSUtb0RGrt4V55SXW5ZV9n5Z4xuVd7w";
@@ -25,20 +25,7 @@ const DriverHomeScreen = () => {
   const [vehicle, setVehicle] = useState(null);
   const [myPosition, setMyPosition] = useState(null);
   const [booking, setBooking] = useState(null);
-  const [newBooking, setNewBooking] = useState({
-    id: "1",
-    type: "Truck",
-    originLatitude: 37.3318056,
-    originLongitude: -122.0296002,
-
-    destLatitude: 37.770707,
-    destLongitude: -122.4003769,
-
-    user: {
-      rating: 4.5,
-      name: "John",
-    },
-  });
+  const [newBooking, setNewBooking] = useState([]);
 
   const fetchVehicle = async () => {
     try {
@@ -51,14 +38,31 @@ const DriverHomeScreen = () => {
       console.error(error);
     }
   };
+
+  const fetchBookings = async () => {
+    try {
+      const bookingsData = await API.graphql(
+        graphqlOperation(
+          listVehicleBookings
+          // {filter: {status:{eq:'NEW'}}}
+        )
+      );
+      setNewBooking(bookingsData.data.listVehicleBookings.items);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchVehicle();
+    fetchBookings();
   }, []);
+
   {
     /*Define onDecline function*/
   }
   const onDecline = () => {
-    setNewBooking(null);
+    setNewBooking(newBooking.slice(1));
   };
   {
     /*Define onAccept function*/
@@ -212,13 +216,13 @@ const DriverHomeScreen = () => {
       </View>
 
       {/* New Vehicle booking popup */}
-      {newBooking && (
+      {newBooking.length > 0 && !booking && (
         <NewVehicleBookingPopUp
-          newBooking={newBooking}
+          newBooking={newBooking[0]}
           duration={2}
           distance={0.5}
           onDecline={onDecline}
-          onAccept={() => onAccept(newBooking)}
+          onAccept={() => onAccept(newBooking[0])}
         />
       )}
     </View>

@@ -33,7 +33,7 @@ const NewVehicleBookingPopUp = ({
           </View>
           <Text style={styles.vehicleType}>
             <AntDesign name={"star"} size={22} />
-            {newBooking.user.rating}
+            {newBooking.user?.rating}
           </Text>
         </View>
 

@@ -30,3 +30,49 @@ export const getVehicle = /* GraphQL */ `
     }
   }
 `;
+
+export const listVehicleBookings = /* GraphQL */ `
+  query ListVehicleBookings(
+    $filter: ModelVehicleBookingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listVehicleBookings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        user {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          userVehiclesId
+        }
+        vehicleId
+        vehicle {
+          id
+          RegistrationNumber
+          VINNumber
+          Manufacture
+          Model
+          Year
+          type
+          createdAt
+          isActive
+          userId
+          updatedAt
+        }
+        createdAt
+        type
+        status
+        originLatitude
+        originLongitude
+        destLatitude
+        destLongitude
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
