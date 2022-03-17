@@ -14,6 +14,7 @@ import Login from "../screens/Login";
 import DeliveryInformation from "../screens/DeliveryInformation";
 import Chats from "../screens/Chats";
 import ConfirmSignUp from "../screens/ConfirmSignUp";
+import DriverHomeScreen from "../screens/DriverHomeScreen";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ const HomeNavigator = (props) => {
       <Stack.Screen name="DeliveryInfo" component={DeliveryInformation} />
       <Stack.Screen name="Chats" component={Chats} />
       <Stack.Screen name="ConfirmSignUp" component={ConfirmSignUp} />
+      <Stack.Screen name="DriverHomeScreen" component={DriverHomeScreen} />
     </Stack.Navigator>
   );
 };

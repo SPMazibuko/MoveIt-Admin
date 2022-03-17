@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -35,6 +35,7 @@ const DriverHomeScreen = () => {
       name: "John",
     },
   });
+
   {
     /*Define onDecline function*/
   }
@@ -55,14 +56,14 @@ const DriverHomeScreen = () => {
     setIsOnLine(!isOnLine);
   };
 
-  const renderBottomTittle = () => {
+  /*  const renderBottomTittle = () => {
     if (isOnLine) {
       return <Text style={styles.bottomText}>You are online</Text>;
     } else {
       return <Text style={styles.bottomText}>You are offline</Text>;
     }
   };
-
+*/
   const onUserLocationChange = (event) => {
     console.log(event);
     setMyPosition(event.nativeEvent.coordinate);

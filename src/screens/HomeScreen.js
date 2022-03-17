@@ -1,7 +1,33 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+
+import * as queries from "../grapql/queries";
+import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
+import awsconfig from "../aws-exports";
+Amplify.configure(awsconfig);
 
 const HomeScreen = ({ navigation }) => {
+  const updateUserCar = async () => {
+    //get authenticated user
+    const authenticatedUser = await Auth.currentAuthenticatedUser({
+      bypassCache: true,
+    });
+    if (!authenticatedUser) {
+      return;
+    }
+
+    //check if the user has a already a car
+
+    const carData = await API.graphql(
+      graphqlOperation(queries.getVehicleId, {
+        id: authenticatedUser.attributes.sub,
+      })
+    );
+    console.warn(carData);
+
+    //if not, create a new car for the user
+  };
+
   return (
     <ScrollView>
       <View
@@ -73,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
                 alignItems: "center",
                 top: 160,
               }}
-              onPress={() => navigation.navigate("Vehicle")}
+              onPress={updateUserCar}
             >
               <Text
                 style={{ fontSize: 25, fontWeight: "bold", color: "white" }}

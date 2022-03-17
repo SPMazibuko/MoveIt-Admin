@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, Text } from "react-native";
 import FormContainer from "./FormContainer";
 import FormInput from "./FormInput";

@@ -16,7 +16,7 @@
       "function": {
         "moveitapp5209987e5209987ePostConfirmation": {
           "deploymentBucketName": "amplify-moveitapp-dev-143516-deployment",
-          "s3Key": "amplify-builds/moveitapp5209987e5209987ePostConfirmation-6f54497958786738514b-build.zip"
+          "s3Key": "amplify-builds/moveitapp5209987e5209987ePostConfirmation-6a75374b53675074504a-build.zip"
         }
       },
       "auth": {

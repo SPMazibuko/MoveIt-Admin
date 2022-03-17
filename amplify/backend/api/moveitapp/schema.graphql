@@ -6,10 +6,13 @@ input AMPLIFY {
 } # FOR TESTING ONLY!
 type User @model {
   id: ID!
-  userName: String!
+  username: String!
   email: String!
-  vehiclebooking: [VehicleBooking]
-  roombooking: [RoomBooking]
+  vehiclesbookings: [VehicleBooking]
+    @hasMany(indexName: "byUser", fields: ["id"])
+  roombooking: [RoomBooking] @hasMany(indexName: "byUser", fields: ["id"])
+
+  vehicles: Vehicle @hasOne
 }
 
 # delivery schemas
@@ -21,14 +24,28 @@ type Vehicle @model {
   Model: String!
   Year: String!
   type: String!
-  vehiclebooking: [VehicleBooking]
+  createdAt: AWSDateTime!
+  isActive: Boolean
+
+  vehiclesbooking: [VehicleBooking]
+    @hasMany(indexName: "byVehicle", fields: ["id"])
+
+  userId: ID!
+  user: User @belongsTo(fields: ["userId"])
 }
 
 type VehicleBooking @model {
   id: ID!
-  user: User!
-  vehicle: Vehicle!
+
+  userId: ID! @index(name: "byUser", sortKeyFields: ["createdAt"])
+  user: User @belongsTo(fields: ["userId"])
+
+  vehicleId: ID @index(name: "byVehicle", sortKeyFields: ["createdAt"])
+  vehicle: Vehicle @belongsTo(fields: ["vehicleId"])
+
   createdAt: AWSDateTime!
+  type: String!
+  status: String
 
   originLatitude: Float!
   originLongitude: Float!
@@ -54,7 +71,8 @@ type Room @model {
 
 type RoomBooking @model {
   id: ID!
-  user: User!
+  userId: ID! @index(name: "byUser", sortKeyFields: ["createdAt"])
+  user: User @belongsTo(fields: ["userId"])
   room: Room!
   createdAt: AWSDateTime!
 }

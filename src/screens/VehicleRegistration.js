@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const myIcon = <Icon name="dot-circle-o" size={30} color="black" />;
 
-const VehicleRegistration = () => {
+const VehicleRegistration = ({ navigation }) => {
   return (
     <ScrollView>
       <ImageBackground
@@ -157,6 +157,7 @@ const VehicleRegistration = () => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
+              onPress={() => navigation.navigate("DriverHomeScreen")}
             >
               <Text
                 style={{ fontSize: 30, fontWeight: "bold", color: "white" }}
