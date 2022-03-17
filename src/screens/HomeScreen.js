@@ -1,13 +1,39 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { getVehicleId } from "../grapql/queries";
 
-import * as queries from "../grapql/queries";
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
-import awsconfig from "../aws-exports";
-Amplify.configure(awsconfig);
+import config from "../aws-exports";
+Amplify.configure(config);
 
 const HomeScreen = ({ navigation }) => {
-  
+  const onDriverButtonPressed = () => {
+    Alert.alert(
+      "Accessing the Driver Portal",
+      "Do you have a car registered with us?",
+      [
+        {
+          text: "YES",
+          onPress: () => {
+            navigation.navigate("DriverHomeScreen");
+          },
+        },
+        {
+          text: "NO",
+          onPress: () => {
+            navigation.navigate("Vehicle");
+          },
+        },
+      ]
+    );
+  };
   const updateUserCar = async () => {
     //get authenticated user
     const authenticatedUser = await Auth.currentAuthenticatedUser({
@@ -16,17 +42,29 @@ const HomeScreen = ({ navigation }) => {
     if (!authenticatedUser) {
       return;
     }
+    console.log(authenticatedUser.attributes.sub);
 
-    //check if the user has a already a car
-
-    const carData = await API.graphql(
-      graphqlOperation(queries.getVehicleId, {
-        id: authenticatedUser.attributes.sub,
-      })
+    //check if the user has a car
+    const vehicleData = await API.graphql(
+      graphqlOperation(getVehicleId, { id: authenticatedUser.attributes.sub })
     );
-    console.warn(carData);
 
+    if (!!vehicleData.data.getVehicle) {
+      console.log("User already owns a vehicle");
+      return;
+    }
     //if not, create a new car for the user
+    const newVehicle = {
+      id: authenticatedUser.attributes,
+      RegistrationNumber: "please word",
+      VINNumber: "4652",
+      Manufacture: "Kunzima",
+      Model: "Not",
+      Year: "2000",
+      type: "Bakkie",
+      userId: authenticatedUser.attributes,
+    };
+    await API.graphql(graphqlOperation(createVehicle, { newVehicle }));
   };
 
   return (
@@ -100,7 +138,7 @@ const HomeScreen = ({ navigation }) => {
                 alignItems: "center",
                 top: 160,
               }}
-              onPress={updateUserCar}
+              onPress={onDriverButtonPressed}
             >
               <Text
                 style={{ fontSize: 25, fontWeight: "bold", color: "white" }}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,12 +6,68 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { createVehicle } from "../grapql/mutations";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const myIcon = <Icon name="dot-circle-o" size={30} color="black" />;
 
 const VehicleRegistration = ({ navigation }) => {
+  const [regiNum, setRegiNum] = useState("");
+  const [vinNum, setVinNum] = useState("");
+  const [manufacture, setManufacture] = useState("");
+  const [year, setYear] = useState("");
+  const [model, setModel] = useState("");
+  const [type, setType] = useState("");
+
+  const onRegister = async () => {
+    try {
+      const authenticatedUser = await Auth.currentAuthenticatedUser({
+        bypassCache: true,
+      });
+      if (!authenticatedUser) {
+        return;
+      }
+      console.log(authenticatedUser.attributes.sub);
+
+      const date = new Date();
+      const input = {
+        id: authenticatedUser.attributes.sub,
+        RegistrationNumber: regiNum,
+        VINNumber: vinNum,
+        Manufacture: manufacture,
+        Model: model,
+        Year: year,
+        type: type,
+        createdAt: date.toISOString(),
+        userId: authenticatedUser.attributes.sub,
+      };
+      const response = await API.graphql(
+        graphqlOperation(createVehicle, {
+          input,
+        })
+      );
+      console.log(response);
+
+      Alert.alert(
+        "Vehicle Successfully Registered",
+        "Thank you for being part of our team of drivers to help the world move their belongings",
+        [
+          {
+            text: "GO ONLINE",
+            onPress: () => {
+              navigation.navigate("DriverHomeScreen");
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView>
       <ImageBackground
@@ -76,17 +132,23 @@ const VehicleRegistration = ({ navigation }) => {
               alignItems: "center",
             }}
           >
+            {/*Registration Number */}
             <TextInput
               style={{
                 backgroundColor: "white",
                 height: 50,
                 width: "85%",
+                margin: 20,
                 borderRadius: 10,
                 padding: 10,
               }}
               placeholder="Registration Number"
+              value={regiNum}
+              onChangeText={(text) => setRegiNum(text)}
+              autoCapitalize="none"
             />
 
+            {/*VIN Number */}
             <TextInput
               style={{
                 backgroundColor: "white",
@@ -97,8 +159,12 @@ const VehicleRegistration = ({ navigation }) => {
                 padding: 10,
               }}
               placeholder="VIN Number"
+              value={vinNum}
+              onChangeText={(text) => setVinNum(text)}
+              autoCapitalize="none"
             />
 
+            {/*Manufacture */}
             <TextInput
               style={{
                 backgroundColor: "white",
@@ -108,7 +174,11 @@ const VehicleRegistration = ({ navigation }) => {
                 padding: 10,
               }}
               placeholder="Manufacturer"
+              value={manufacture}
+              onChangeText={(text) => setManufacture(text)}
+              autoCapitalize="none"
             />
+
             <View
               style={{
                 flexDirection: "row",
@@ -116,6 +186,7 @@ const VehicleRegistration = ({ navigation }) => {
                 margin: 20,
               }}
             >
+              {/*Model of the vehicle*/}
               <TextInput
                 style={{
                   backgroundColor: "white",
@@ -126,6 +197,9 @@ const VehicleRegistration = ({ navigation }) => {
                   borderRadius: 10,
                 }}
                 placeholder="Model"
+                value={model}
+                onChangeText={(text) => setModel(text)}
+                autoCapitalize="none"
               />
 
               <TextInput
@@ -138,8 +212,25 @@ const VehicleRegistration = ({ navigation }) => {
                   borderRadius: 10,
                 }}
                 placeholder="Year"
+                value={year}
+                onChangeText={(text) => setYear(text)}
+                autoCapitalize="none"
               />
             </View>
+            {/*Type of vehicle being registered */}
+            <TextInput
+              style={{
+                backgroundColor: "white",
+                height: 50,
+                width: "85%",
+                borderRadius: 10,
+                padding: 10,
+              }}
+              placeholder="Type"
+              value={type}
+              onChangeText={(text) => setType(text)}
+              autoCapitalize="none"
+            />
           </View>
           <View
             style={{
@@ -157,7 +248,7 @@ const VehicleRegistration = ({ navigation }) => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onPress={() => navigation.navigate("DriverHomeScreen")}
+              onPress={onRegister}
             >
               <Text
                 style={{ fontSize: 30, fontWeight: "bold", color: "white" }}
