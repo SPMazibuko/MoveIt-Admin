@@ -7,6 +7,7 @@ import awsconfig from "../aws-exports";
 Amplify.configure(awsconfig);
 
 const HomeScreen = ({ navigation }) => {
+  
   const updateUserCar = async () => {
     //get authenticated user
     const authenticatedUser = await Auth.currentAuthenticatedUser({
