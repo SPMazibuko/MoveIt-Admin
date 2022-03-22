@@ -34,39 +34,27 @@ const HomeScreen = ({ navigation }) => {
       ]
     );
   };
-  const updateUserCar = async () => {
-    //get authenticated user
-    const authenticatedUser = await Auth.currentAuthenticatedUser({
-      bypassCache: true,
-    });
-    if (!authenticatedUser) {
-      return;
-    }
-    console.log(authenticatedUser.attributes.sub);
 
-    //check if the user has a car
-    const vehicleData = await API.graphql(
-      graphqlOperation(getVehicleId, { id: authenticatedUser.attributes.sub })
+  const onLandlordPressed = () => {
+    Alert.alert(
+      "Accessing the Landlord Portal",
+      "Do you have Rooms registered with us?",
+      [
+        {
+          text: "YES",
+          onPress: () => {
+            navigation.navigate("LandlordHomeScreen");
+          },
+        },
+        {
+          text: "NO",
+          onPress: () => {
+            navigation.navigate("RoomRegistration");
+          },
+        },
+      ]
     );
-
-    if (!!vehicleData.data.getVehicle) {
-      console.log("User already owns a vehicle");
-      return;
-    }
-    //if not, create a new car for the user
-    const newVehicle = {
-      id: authenticatedUser.attributes,
-      RegistrationNumber: "please word",
-      VINNumber: "4652",
-      Manufacture: "Kunzima",
-      Model: "Not",
-      Year: "2000",
-      type: "Bakkie",
-      userId: authenticatedUser.attributes,
-    };
-    await API.graphql(graphqlOperation(createVehicle, { newVehicle }));
   };
-
   return (
     <ScrollView>
       <View
@@ -172,7 +160,7 @@ const HomeScreen = ({ navigation }) => {
                 alignItems: "center",
                 top: 160,
               }}
-              onPress={() => navigation.navigate("RoomRegistration")}
+              onPress={onLandlordPressed}
             >
               <Text
                 style={{ fontSize: 25, fontWeight: "bold", color: "white" }}

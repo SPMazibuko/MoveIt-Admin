@@ -8,11 +8,13 @@ type User @model {
   id: ID!
   username: String!
   email: String!
+
   vehiclesbookings: [VehicleBooking]
     @hasMany(indexName: "byUser", fields: ["id"])
-  roombooking: [RoomBooking] @hasMany(indexName: "byUser", fields: ["id"])
+  roomsbooking: [RoomBooking] @hasMany(indexName: "byUser", fields: ["id"])
 
-  vehicles: Vehicle @hasOne
+  vehicle: Vehicle @hasOne
+  room: Room @hasOne
 }
 
 # delivery schemas
@@ -26,7 +28,9 @@ type Vehicle @model {
   type: String!
   createdAt: AWSDateTime!
   isActive: Boolean
-
+  latitude: Float
+  longitude: Float
+  heading: Float
   vehiclesbooking: [VehicleBooking]
     @hasMany(indexName: "byVehicle", fields: ["id"])
 
@@ -66,13 +70,29 @@ type Room @model {
   price: Float!
   type: String!
   description: String!
-  roombooking: [RoomBooking]
+  isActive: Boolean
+  roomsbooking: [RoomBooking] @hasMany(indexName: "byRoom", fields: ["id"])
+  userId: ID!
+  user: User @belongsTo(fields: ["userId"])
 }
 
 type RoomBooking @model {
   id: ID!
+
   userId: ID! @index(name: "byUser", sortKeyFields: ["createdAt"])
   user: User @belongsTo(fields: ["userId"])
-  room: Room!
+
+  roomId: ID @index(name: "byRoom", sortKeyFields: ["createdAt"])
+  room: Room @belongsTo(fields: ["roomId"])
+
   createdAt: AWSDateTime!
+  type: String!
+  status: String
+}
+
+type Subscription {
+  onVehicleBookingUpdated(id: ID!): VehicleBooking
+    @aws_subscribe(mutations: ["updateVehicleBooking"])
+  onVehicleUpdated(id: ID!): Vehicle
+    @aws_subscribe(mutations: ["updateVehicle"])
 }

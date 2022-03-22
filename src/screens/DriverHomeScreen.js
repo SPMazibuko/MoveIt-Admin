@@ -15,7 +15,7 @@ import NewVehicleBookingPopUp from "./NewVehicleBookingPopUp";
 
 import { Auth, API, graphqlOperation } from "aws-amplify";
 import { getVehicle, listVehicleBookings } from "../grapql/queries";
-import { updateVehicle } from "../grapql/mutations";
+import { updateVehicle, updateVehicleBooking } from "../grapql/mutations";
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAGXSUtb0RGrt4V55SXW5ZV9n5Z4xuVd7w";
 const origin = { latitude: 37.3318456, longitude: -122.0296002 };
@@ -23,7 +23,6 @@ const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 const DriverHomeScreen = () => {
   const [vehicle, setVehicle] = useState(null);
-  const [myPosition, setMyPosition] = useState(null);
   const [booking, setBooking] = useState(null);
   const [newBooking, setNewBooking] = useState([]);
 
@@ -42,10 +41,9 @@ const DriverHomeScreen = () => {
   const fetchBookings = async () => {
     try {
       const bookingsData = await API.graphql(
-        graphqlOperation(
-          listVehicleBookings
-          // {filter: {status:{eq:'NEW'}}}
-        )
+        graphqlOperation(listVehicleBookings, {
+          filter: { status: { eq: "NEW" } },
+        })
       );
       setNewBooking(bookingsData.data.listVehicleBookings.items);
     } catch (error) {
@@ -67,9 +65,22 @@ const DriverHomeScreen = () => {
   {
     /*Define onAccept function*/
   }
-  const onAccept = (newBooking) => {
-    setBooking(newBooking);
-    setNewBooking(null);
+  const onAccept = async (newBookings) => {
+    try {
+      const input = {
+        id: newBookings.id,
+        status: "PICKING_UP_CLIENT",
+        vehicleId: vehicle.id,
+      };
+      const bookingData = await API.graphql(
+        graphqlOperation(updateVehicleBooking, { input })
+      );
+      setBooking(bookingData.data.updateVehicleBooking);
+    } catch (e) {
+      console.log(e);
+    }
+
+    setNewBooking(newBooking.slice(1));
   };
   {
     /*Go button pressed */
@@ -91,9 +102,38 @@ const DriverHomeScreen = () => {
     }
   };
 
-  const onUserLocationChange = (event) => {
-    console.log(event);
-    setMyPosition(event.nativeEvent.coordinate);
+  const onUserLocationChange = async (event) => {
+    console.log(event.nativeEvent.coordinate);
+    const { latitude, longitude, heading } = event.nativeEvent.coordinate;
+    //update vehicle and set it to active
+    try {
+      const userData = await Auth.currentAuthenticatedUser();
+      const input = {
+        id: userData.attributes.sub,
+        latitude,
+        longitude,
+        heading,
+      };
+      const updatedVehicle = await API.graphql(
+        graphqlOperation(updateVehicle, { input })
+      );
+      setVehicle(updatedVehicle.data.updateVehicle);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getDestination = () => {
+    if (booking && booking.pickedUp) {
+      return {
+        latitude: booking.destLatitude,
+        longitude: booking.destLongitude,
+      };
+    }
+    return {
+      latitude: booking.originLatitude,
+      longitude: booking.originLongitude,
+    };
   };
 
   const onDirectionFound = (event) => {
@@ -103,9 +143,12 @@ const DriverHomeScreen = () => {
         ...booking,
         distance: event.distance,
         duration: event.duration,
+        pickedUp: booking.pickedUp || event.distance < 0.2,
+        isFinished: booking.pickedUp && event.distance < 0.2,
       });
     }
   };
+
   return (
     <View>
       <Mapview
@@ -114,25 +157,24 @@ const DriverHomeScreen = () => {
           width: "100%",
           backgroundColor: "gray",
         }}
-        loadingEnabled={true}
         provider={PROVIDER_GOOGLE}
         showUserLocation={true}
         onUserLocationChange={onUserLocationChange}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
+          latitude: -25.539016,
+          longitude: 28.095629,
           latitudeDelta: 0.2001,
           longitudeDelta: 0.2001,
         }}
       >
         {booking && (
           <MapViewDirections
-            origin={myPosition}
-            onReady={onDirectionFound}
-            destination={{
-              latitude: booking.originLatitude,
-              longitude: booking.originLongitude,
+            origin={{
+              latitude: vehicle?.latitude,
+              longitude: vehicle?.longitude,
             }}
+            onReady={onDirectionFound}
+            destination={getDestination}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={5}
             strokeColor="black"
@@ -186,11 +228,50 @@ const DriverHomeScreen = () => {
         <Ionicons name={"options"} size={30} color="#4a4a4a" />
 
         {/*Check if booking is available calculate the distance to the user*/}
-        {booking ? (
+        {booking && booking.isFinished ? (
+          <View style={{ alignItems: "center" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: "black",
+                width: 200,
+                justifyContent: "center",
+                padding: 10,
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "bold" }}>
+                COMPLETE {booking.type}
+              </Text>
+            </View>
+            <Text style={styles.bottomText}>{booking.user.username}</Text>
+          </View>
+        ) : booking && booking.pickedUp ? (
           <View style={{ alignItems: "center" }}>
             <View style={{ flexDirection: "row" }}>
               <Text>
-                {booking.duration ? booking.duration.toFixed(2) : "?"} min
+                {booking.duration ? booking.duration.toFixed(1) : "?"} min
+              </Text>
+              <View style={{ borderRadius: 100 }}>
+                <Image
+                  source={require("../../assets/Images/profile.png")}
+                  resizeMode="contain"
+                  style={{ width: 30, height: 30, borderRadius: 100 }}
+                />
+              </View>
+              <Text>
+                {booking.distance ? booking.distance.toFixed(1) : "?"} km
+              </Text>
+            </View>
+            <Text style={styles.bottomText}>
+              Dropping Off {booking?.user?.username}
+            </Text>
+          </View>
+        ) : booking ? (
+          <View style={{ alignItems: "center" }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text>
+                {booking.duration ? booking.duration.toFixed(2) : "?"} Min
               </Text>
               <View style={{ borderRadius: 100 }}>
                 <Image
@@ -204,7 +285,7 @@ const DriverHomeScreen = () => {
               </Text>
             </View>
             <Text style={styles.bottomText}>
-              Picking up {booking.user.name}
+              Picking up {booking?.user?.username}
             </Text>
           </View>
         ) : vehicle?.isActive ? (

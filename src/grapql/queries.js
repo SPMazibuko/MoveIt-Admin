@@ -18,6 +18,9 @@ export const getVehicle = /* GraphQL */ `
       type
       createdAt
       isActive
+      latitude
+      longitude
+      heading
       userId
       user {
         id
@@ -47,7 +50,7 @@ export const listVehicleBookings = /* GraphQL */ `
           email
           createdAt
           updatedAt
-          userVehiclesId
+          userVehicleId
         }
         vehicleId
         vehicle {
@@ -60,6 +63,9 @@ export const listVehicleBookings = /* GraphQL */ `
           type
           createdAt
           isActive
+          latitude
+          longitude
+          heading
           userId
           updatedAt
         }
@@ -73,6 +79,34 @@ export const listVehicleBookings = /* GraphQL */ `
         updatedAt
       }
       nextToken
+    }
+  }
+`;
+
+export const getRoom = /* GraphQL */ `
+  query GetRoom($id: ID!) {
+    getRoom(id: $id) {
+      id
+      province
+      town
+      houseNumber
+      streetNumber
+      suburb
+      zipCode
+      price
+      type
+      description
+      isActive
+      userId
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
