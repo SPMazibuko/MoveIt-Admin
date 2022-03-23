@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { getVehicleId } from "../grapql/queries";
 
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import config from "../aws-exports";

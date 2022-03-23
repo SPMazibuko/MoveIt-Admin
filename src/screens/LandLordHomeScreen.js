@@ -12,25 +12,16 @@ import {
 
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import NewVehicleBookingPopUp from "./NewVehicleBookingPopUp";
 
 import { Auth, API, graphqlOperation } from "aws-amplify";
-import { getRoom } from "../grapql/queries";
-import { updateRoom } from "../grapql/mutations";
+import { getRoom, listRoomBookings } from "../grapql/queries";
+import { updateRoom, updateRoomBooking } from "../grapql/mutations";
 import NewRoomBookingPopup from "./NewRoomBookingPopup";
 
 const LandLordHomeScreen = () => {
   const [room, setRoom] = useState(null);
   const [booking, setBooking] = useState(null);
-  const [newBooking, setNewBooking] = useState({
-    id: "1",
-    type: "Single",
-
-    user: {
-      rating: 4.8,
-      name: "Sifiso",
-    },
-  });
+  const [newBooking, setNewBooking] = useState([]);
 
   const fetchRoom = async () => {
     try {
@@ -44,23 +35,23 @@ const LandLordHomeScreen = () => {
     }
   };
 
-  useEffect(() => {
-    fetchRoom();
-    fetchBookings();
-  }, []);
-
   const fetchBookings = async () => {
     try {
       const bookingsData = await API.graphql(
-        graphqlOperation(listVehicleBookings, {
+        graphqlOperation(listRoomBookings, {
           filter: { status: { eq: "NEW" } },
         })
       );
-      setNewBooking(bookingsData.data.listVehicleBookings.items);
+      setNewBooking(bookingsData.data.listRoomBookings.items);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchRoom();
+    fetchBookings();
+  }, []);
 
   {
     /*Define on Decline booking function*/
@@ -80,9 +71,9 @@ const LandLordHomeScreen = () => {
         roomId: room.id,
       };
       const bookingData = await API.graphql(
-        graphqlOperation(updateVehicleBooking, { input })
+        graphqlOperation(updateRoomBooking, { input })
       );
-      setBooking(bookingData.data.updateVehicleBooking);
+      setBooking(bookingData.data.updateRoomBooking);
     } catch (e) {
       console.log(e);
     }
@@ -93,7 +84,6 @@ const LandLordHomeScreen = () => {
   {
     /* Update Room availability*/
   }
-
   const onAvailablePressed = async () => {
     try {
       const userData = await Auth.currentAuthenticatedUser();
@@ -117,7 +107,7 @@ const LandLordHomeScreen = () => {
         source={require("../../assets/Images/background/bg.png")}
       >
         <View>
-          {/*Go Button */}
+          {/*ACTIVATE Button */}
           <TouchableOpacity
             onPress={onAvailablePressed}
             style={styles.goButton}
@@ -128,12 +118,12 @@ const LandLordHomeScreen = () => {
           </TouchableOpacity>
         </View>
         {room?.isActive ? (
-          <Text>Room Available</Text>
+          <Text style={styles.bottomText}>Room Available</Text>
         ) : (
-          <Text>Room not Available</Text>
+          <Text style={styles.bottomText}>Room not Available</Text>
         )}
         {/* New Vehicle booking popup */}
-        {!booking && (
+        {newBooking.length > 0 && !booking && (
           <NewRoomBookingPopup
             newBooking={newBooking[0]}
             onDecline={onDecline}
@@ -151,13 +141,13 @@ const styles = StyleSheet.create({
   goButton: {
     position: "absolute",
     backgroundColor: "#1495ff",
-    width: 75,
-    height: 75,
+    width: 200,
+    height: 100,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 50,
-    bottom: 110,
-    left: Dimensions.get("window").width / 2 - 37,
+    borderRadius: 40,
+    top: Dimensions.get("window").height / 2 - 10,
+    left: Dimensions.get("window").width / 2 - 100,
   },
   goText: {
     fontSize: 30,
@@ -169,5 +159,12 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 25,
+  },
+  bottomText: {
+    fontSize: 50,
+    fontWeight: "bold",
+    color: "#fff",
+    marginStart: 50,
+    marginVertical: 77,
   },
 });

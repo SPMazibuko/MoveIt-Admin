@@ -116,3 +116,24 @@ export const updateRoom = /* GraphQL */ `
     }
   }
 `;
+
+export const updateRoomBooking = /* GraphQL */ `
+  mutation UpdateRoomBooking(
+    $input: UpdateRoomBookingInput!
+    $condition: ModelRoomBookingConditionInput
+  ) {
+    updateRoomBooking(input: $input, condition: $condition) {
+      id
+      userId
+      roomId
+      createdAt
+      type
+      status
+      user {
+        id
+        username
+      }
+      updatedAt
+    }
+  }
+`;

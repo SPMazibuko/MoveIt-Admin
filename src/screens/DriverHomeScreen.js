@@ -18,8 +18,6 @@ import { getVehicle, listVehicleBookings } from "../grapql/queries";
 import { updateVehicle, updateVehicleBooking } from "../grapql/mutations";
 
 const GOOGLE_MAPS_APIKEY = "AIzaSyAGXSUtb0RGrt4V55SXW5ZV9n5Z4xuVd7w";
-const origin = { latitude: 37.3318456, longitude: -122.0296002 };
-const destination = { latitude: 37.771707, longitude: -122.4053769 };
 
 const DriverHomeScreen = () => {
   const [vehicle, setVehicle] = useState(null);

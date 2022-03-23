@@ -110,3 +110,49 @@ export const getRoom = /* GraphQL */ `
     }
   }
 `;
+
+export const listRoomBookings = /* GraphQL */ `
+  query ListRoomBookings(
+    $filter: ModelRoomBookingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listRoomBookings(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        user {
+          id
+          username
+          email
+          createdAt
+          updatedAt
+          userVehicleId
+          userRoomId
+        }
+        roomId
+        room {
+          id
+          province
+          town
+          houseNumber
+          streetNumber
+          suburb
+          zipCode
+          price
+          type
+          description
+          isActive
+          userId
+          createdAt
+          updatedAt
+        }
+        createdAt
+        type
+        status
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

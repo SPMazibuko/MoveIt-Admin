@@ -50,7 +50,7 @@ type VehicleBooking @model {
   createdAt: AWSDateTime!
   type: String!
   status: String
-
+  Schedule: String
   originLatitude: Float!
   originLongitude: Float!
 

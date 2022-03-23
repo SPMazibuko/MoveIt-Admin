@@ -5,7 +5,13 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 const NewRoomBookingPopup = ({ newBooking, onAccept, onDecline }) => {
   return (
     <View style={styles.root}>
-      <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          marginTop: 150,
+        }}
+      >
         <Pressable onPress={onDecline} style={styles.declineButton}>
           <Text style={styles.declineText}>Decline</Text>
         </Pressable>
@@ -40,7 +46,7 @@ const styles = StyleSheet.create({
   root: {
     position: "absolute",
     width: "100%",
-    bottom: 10,
+    bottom: 120,
     padding: 20,
     height: "100%",
     justifyContent: "space-between",
@@ -50,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     borderRadius: 10,
     alignItems: "center",
-    height: 240,
+    height: 120,
     justifyContent: "space-around",
   },
   row: {
